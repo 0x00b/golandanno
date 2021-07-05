@@ -1,19 +1,42 @@
 <idea-plugin>
-    <id>org.jetbrains.plugins.template</id>
-    <name>Template</name>
-    <vendor>JetBrains</vendor>
+    <id>org.0x00b.plugins.goan</id>
+    <name>GoAn</name>
+    <vendor>0x00b</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="org.jetbrains.plugins.template.services.MyApplicationService"/>
-        <projectService serviceImplementation="org.jetbrains.plugins.template.services.MyProjectService"/>
-    </extensions>
+<!--    <extensions defaultExtensionNs="com.intellij">-->
+<!--        <applicationService serviceImplementation="org.jetbrains.plugins.template.services.MyApplicationService"/>-->
+<!--        <projectService serviceImplementation="org.jetbrains.plugins.template.services.MyProjectService"/>-->
+<!--    </extensions>-->
 
-    <applicationListeners>
-        <listener class="org.jetbrains.plugins.template.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+<!--    <applicationListeners>-->
+<!--        <listener class="org.jetbrains.plugins.template.listeners.MyProjectManagerListener"-->
+<!--                  topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
+<!--    </applicationListeners>-->
+
+    <actions>
+        <action id="org.ago.goan.action.GoAnAction" class="org.ago.goan.action.GoAnAction"
+                text="GoAn" description="Auto generate comments for golang function,variable,struct">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta SLASH"/>
+        </action>
+        <action id="org.ago.goan.action.GoAnKeyMap4Windows" class="org.ago.goan.action.GoAnAction"
+                text="GoAn" description="Auto generate comments for golang function,variable,struct">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
+        </action>
+        <action id="org.ago.goan.action.GoAnSettingAction" class="org.ago.goan.action.GoAnSettingAction"
+                text="GoAn Setting">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+<!--         <action id="Go.BuilderGenerator" class="com.cn.oddcn.GoBuilderGeneratorAction"-->
+<!--                text="Generate Go Builder Pattern Code"-->
+<!--                description="Generate Builder pattern code for Go">-->
+<!--            <add-to-group group-id="CodeMenu" anchor="after" relative-to-action="Generate"/>-->
+<!--            <keyboard-shortcut keymap="$default" first-keystroke="alt B"/>-->
+<!--        </action>-->
+    </actions>
+
 </idea-plugin>
