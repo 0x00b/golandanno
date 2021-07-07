@@ -1,5 +1,8 @@
 package org.ago.goan.test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -141,14 +144,27 @@ public class main {
 
             System.out.println(code[i]);
             if (regexMatcher.find()) {
-                for (int j = 0; j <= regexMatcher.groupCount() ; j++) {
+                for (int j = 0; j <= regexMatcher.groupCount(); j++) {
                     System.out.println(regexMatcher.group(j));
                 }
                 System.out.println("==============================================");
             }
         }
     }
+
     public static void main(String[] args) {
+
+        try {
+            Process p = Runtime.getRuntime().exec("git config user.name");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            return;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String[] code = new String[]{
                 " XXX  ",
@@ -168,7 +184,7 @@ public class main {
 
             System.out.println(code[i]);
             if (regexMatcher.find()) {
-                for (int j = 0; j <= regexMatcher.groupCount() ; j++) {
+                for (int j = 0; j <= regexMatcher.groupCount(); j++) {
                     System.out.println(regexMatcher.group(j));
                 }
                 System.out.println("==============================================");

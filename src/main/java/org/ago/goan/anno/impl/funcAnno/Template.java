@@ -5,10 +5,10 @@ public interface Template {
     String generate(goFunc func, String linePrefix, String selectedCode);
 
     // default template code
-    String DefaultFuncTemplate = "//${function_name} TODO\n" +
-            "//@receiver ${receiver_name_type}: \n" +
-            "//@param ${param_name_type}: \n" +
-            "//@return ${ret_name_type}: \n";
+    String DefaultFuncTemplate = "// ${function_name} TODO\n" +
+            "// @receiver ${receiver_name_type}: \n" +
+            "// @param ${param_name_type}: \n" +
+            "// @return ${ret_name_type}: \n";
 
     String FUNC_TEMPLATE_KEY = "GoAn.Edit.FuncTemplate";
 
