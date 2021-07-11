@@ -1,11 +1,8 @@
 package org.ago.goan.anno.impl.varAnno;
 
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.project.Project;
+import org.ago.goan.anno.Context;
 import org.ago.goan.anno.impl.DetectResult;
 import org.ago.goan.anno.impl.GoType;
-import org.ago.goan.utils.FindCodeResult;
-import org.ago.goan.utils.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,10 +13,9 @@ public class varAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
 
 
     @Override
-    public DetectResult detect(String code, CaretModel caretModel) {
-        FindCodeResult codeResult = StringUtils.findCodeStart(code, caretModel);
+    public DetectResult detect(Context ctx) {
 
-        String typeCode = codeResult.getCode();
+        String typeCode = ctx.code.Code;
 
         GoType f = new GoType();
         Matcher funcRegexMatcher = varRegexPattern.matcher(typeCode);
@@ -31,8 +27,7 @@ public class varAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
         f.setType(funcRegexMatcher.group(2));
         DetectResult res = new DetectResult();
         res.setResult(f);
-        res.setCaretModel(caretModel);
-        res.setStartLine(codeResult.getStartLine());
+         res.setStartLine(ctx.code.StartLine);
         res.setCode(typeCode);
         Matcher match = Pattern.compile("^(\\s*)\\w+").matcher(typeCode);
         if (match.find()) {
@@ -43,11 +38,7 @@ public class varAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     }
 
     @Override
-    public String generate(DetectResult result, String selectedCode) {
-
-        if (result == null || null == result.getResult()) {
-            return "";
-        }
+    public String generate(Context ctx, DetectResult result, String selectedCode) {
 
         if (result.getResult().getClass().equals(GoType.class)) {
             GoType type = (GoType) result.getResult();

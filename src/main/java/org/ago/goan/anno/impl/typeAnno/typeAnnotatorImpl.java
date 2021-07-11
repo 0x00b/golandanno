@@ -1,10 +1,8 @@
 package org.ago.goan.anno.impl.typeAnno;
 
-import com.intellij.openapi.editor.CaretModel;
+import org.ago.goan.anno.Context;
 import org.ago.goan.anno.impl.DetectResult;
 import org.ago.goan.anno.impl.GoType;
-import org.ago.goan.utils.FindCodeResult;
-import org.ago.goan.utils.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,13 +13,10 @@ public class typeAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     public static Pattern typeRegexPattern = Pattern.compile("^\\s*type\\s*(\\w+)\\s*(\\w+)\\s*");
 
     @Override
-    public DetectResult detect(String code, CaretModel caretModel) {
-        FindCodeResult codeResult = StringUtils.findCodeStart(code, caretModel);
-
-        String typeCode = codeResult.getCode();
+    public DetectResult detect(Context ctx) {
 
         GoType f = new GoType();
-        Matcher funcRegexMatcher = typeRegexPattern.matcher(typeCode);
+        Matcher funcRegexMatcher = typeRegexPattern.matcher(ctx.code.Code);
 
         if (!funcRegexMatcher.find()) {
             return null;
@@ -30,10 +25,9 @@ public class typeAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
         f.setType(funcRegexMatcher.group(2));
         DetectResult res = new DetectResult();
         res.setResult(f);
-        res.setCaretModel(caretModel);
-        res.setStartLine(codeResult.getStartLine());
-        res.setCode(typeCode);
-        Matcher match = Pattern.compile("^(\\s*)\\w+").matcher(typeCode);
+        res.setStartLine(ctx.code.StartLine);
+        res.setCode(ctx.code.Code);
+        Matcher match = Pattern.compile("^(\\s*)\\w+").matcher(ctx.code.Code);
         if (match.find()) {
             res.setLinePrefix(match.group(1));
         }
@@ -42,11 +36,7 @@ public class typeAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     }
 
     @Override
-    public String generate(DetectResult result, String selectedCode) {
-
-        if (result == null || null == result.getResult()) {
-            return "";
-        }
+    public String generate(Context ctx, DetectResult result, String selectedCode) {
 
         if (result.getResult().getClass().equals(GoType.class)) {
             GoType type = (GoType) result.getResult();

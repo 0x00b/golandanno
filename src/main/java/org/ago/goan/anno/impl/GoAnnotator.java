@@ -1,10 +1,9 @@
 package org.ago.goan.anno.impl;
 
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.project.Project;
+import org.ago.goan.anno.Context;
 
 public interface GoAnnotator {
-    DetectResult detect(String code, CaretModel caretModel);
+    DetectResult detect(Context ctx);
 
-    String generate(DetectResult code, String selectedCode);
+    String generate(Context ctx, DetectResult code, String selectedCode);
 }

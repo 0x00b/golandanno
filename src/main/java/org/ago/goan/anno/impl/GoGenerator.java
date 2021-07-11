@@ -1,11 +1,7 @@
 package org.ago.goan.anno.impl;
 
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.project.Project;
+import org.ago.goan.anno.Context;
 import org.ago.goan.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -21,21 +17,17 @@ public class GoGenerator implements org.ago.goan.anno.Annotator {
     }
 
     @Override
-    public void generate(Project project, Editor editor, CaretModel caretModel, String code) {
+    public void generate(Context ctx) {
 
         String annotation = null;
         DetectResult res = null;
         GoAnnotator anno = null;
 
-        int start = editor.getSelectionModel().getSelectionStart();
-        int end = editor.getSelectionModel().getSelectionEnd();
-
-
         for (int i = 0; i < annotatorList.size(); i++) {
             anno = annotatorList.get(i);
-            res = anno.detect(code, caretModel);
+            res = anno.detect(ctx);
             if (null != res) {
-                annotation = anno.generate(res, code.substring(start, end));
+                annotation = anno.generate(ctx, res, ctx.SelectCode);
                 break;
             }
         }
@@ -44,52 +36,44 @@ public class GoGenerator implements org.ago.goan.anno.Annotator {
             return;
         }
 
-        insertAnnotation(project, editor, caretModel, code, res, annotation);
+        insertAnnotation(ctx, res, annotation);
 
         return;
     }
 
 
-    void insertAnnotation(Project project, Editor editor, CaretModel caretModel, String code, DetectResult result, String annotation) {
+    void insertAnnotation(Context ctx, DetectResult result, String annotation) {
+ 
 
-        // find first func
-        Document document = editor.getDocument();
-        if (null == document) {
-            return;
-        }
-
-        int start = editor.getSelectionModel().getSelectionStart();
-        int end = editor.getSelectionModel().getSelectionEnd();
-
-        if (start < end) {
-            int upLineStart = document.getLineStartOffset(caretModel.getLogicalPosition().line - 1);
-            int upLineEnd = document.getLineEndOffset(caretModel.getLogicalPosition().line - 1);
-            String upCode = code.substring(upLineStart, upLineEnd);
+        if (ctx.SelectStart < ctx.SelectEnd) {
+            int upLineStart = ctx.document.getLineStartOffset(ctx.caretModel.getLogicalPosition().line - 1);
+            int upLineEnd = ctx.document.getLineEndOffset(ctx.caretModel.getLogicalPosition().line - 1);
+            String upCode = ctx.content.substring(upLineStart, upLineEnd);
             if (!StringUtils.isBlank(upCode)) {
                 annotation = "\n" + annotation;
             }
             final String finalAnnotation = annotation;
-            WriteCommandAction.runWriteCommandAction(project, () -> document.replaceString(start, end, finalAnnotation));
+            WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.replaceString(ctx.SelectStart , ctx.SelectEnd, finalAnnotation));
             return;
         }
 
-        int upLineStart = document.getLineStartOffset(result.getStartLine() - 1);
-        int upLineEnd = document.getLineEndOffset(result.getStartLine() - 1);
-        String upCode = code.substring(upLineStart, upLineEnd);
+        int upLineStart = ctx.document.getLineStartOffset(result.getStartLine() - 1);
+        int upLineEnd = ctx.document.getLineEndOffset(result.getStartLine() - 1);
+        String upCode = ctx.content.substring(upLineStart, upLineEnd);
         if (!StringUtils.isBlank(upCode)) {
             annotation = "\n\n" + annotation;
         } else {
-            upLineStart = document.getLineStartOffset(result.getStartLine() - 2);
-            upLineEnd = document.getLineEndOffset(result.getStartLine() - 2);
-            upCode = code.substring(upLineStart, upLineEnd);
+            upLineStart = ctx.document.getLineStartOffset(result.getStartLine() - 2);
+            upLineEnd = ctx.document.getLineEndOffset(result.getStartLine() - 2);
+            upCode = ctx.content.substring(upLineStart, upLineEnd);
             if (!StringUtils.isBlank(upCode)) {
                 annotation = "\n" + annotation;
             }
         }
 
         final String finalAnnotation = annotation;
-        int offset = document.getLineEndOffset(result.getStartLine() - 1);
-        WriteCommandAction.runWriteCommandAction(project, () -> document.insertString(offset, finalAnnotation));
+        int offset = ctx.document.getLineEndOffset(result.getStartLine() - 1);
+        WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.insertString(offset, finalAnnotation));
     }
 
 

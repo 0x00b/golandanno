@@ -1,10 +1,8 @@
 package org.ago.goan.anno.impl.funcAnno;
 
-import com.intellij.openapi.editor.CaretModel;
+import org.ago.goan.anno.Context;
 import org.ago.goan.anno.impl.DetectResult;
 import org.ago.goan.anno.impl.Variable;
-import org.ago.goan.utils.FindCodeResult;
-import org.ago.goan.utils.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,19 +25,17 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     }
 
     @Override
-    public DetectResult detect(String code, CaretModel caretModel) {
+    public DetectResult detect(Context ctx) {
 
-        FindCodeResult codeResult = StringUtils.findCodeStart(code, caretModel);
-        goFunc func = parse(codeResult.getCode());
+         goFunc func = parse(ctx.code.Code);
         if (func == null) {
             return null;
         }
-        String funcCode = codeResult.getCode();
+        String funcCode = ctx.code.Code;
         DetectResult res = new DetectResult();
         res.setResult(func);
         res.setCode(funcCode);
-        res.setCaretModel(caretModel);
-        res.setStartLine(codeResult.getStartLine());
+         res.setStartLine(ctx.code.StartLine);
         Matcher match = Pattern.compile("^(\\s*)\\w+").matcher(funcCode);
         if (match.find()) {
             res.setLinePrefix(match.group(1));
@@ -78,18 +74,11 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     }
 
     @Override
-    public String generate(DetectResult result, String selectedCode) {
-        if (result == null) {
-            return "";
-        }
-
-        if (null == result.getResult()) {
-            return "";
-        }
+    public String generate(Context ctx, DetectResult result, String selectedCode) {
 
         if (result.getResult().getClass().equals(goFunc.class)) {
             goFunc func = (goFunc) result.getResult();
-            return template.generate(func, result.getLinePrefix(), selectedCode);
+            return template.generate(ctx, func, result.getLinePrefix(), selectedCode);
         }
 
         return "";

@@ -1,7 +1,10 @@
 package org.ago.goan.anno.impl.funcAnno;
 
 import com.intellij.ide.util.PropertiesComponent;
+import org.ago.goan.anno.CommonTemplate;
+import org.ago.goan.anno.Context;
 import org.ago.goan.anno.impl.Variable;
+import org.ago.goan.cust.Constant;
 import org.ago.goan.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ public class TemplateImpl implements  Template {
             RET_NAME_TYPE,
             RET_NAME,
             RET_TYPE,
-            DATE,
+            CommonTemplate.DATE,
     };
 
     int AnnotateType;
@@ -65,14 +68,14 @@ public class TemplateImpl implements  Template {
 
     // 记住一个原则，go的参数type一定会有，name不一定有
     @Override
-    public String generate(goFunc func, String linePrefix, String selectedCode) {
+    public String generate(Context ctx, goFunc func, String linePrefix, String selectedCode) {
 
         String[] selectedCodes = selectedCode.split("\n");
         for (int i = 0; i < selectedCodes.length; i++) {
             selectedCodes[i] = selectedCodes[i].replace("TODO","");
         }
 
-        String template = PropertiesComponent.getInstance().getValue(Template.FUNC_TEMPLATE_KEY);
+        String template = PropertiesComponent.getInstance().getValue(Constant.FUNC_TEMPLATE_KEY);
 
         if (template == null) {
             template = Template.DefaultFuncTemplate;
@@ -143,8 +146,8 @@ public class TemplateImpl implements  Template {
                 case RET_TYPE:
                     line = formatListLine(RET_TYPE, kt.getTemplate(),selectedCodes, linePrefix, rs,2);
                     break;
-                case DATE:
-                    line = linePrefix + kt.getTemplate().replace(DATE, new Date().toString());
+                case CommonTemplate.DATE:
+                    line = linePrefix + kt.getTemplate().replace(CommonTemplate.DATE, new Date().toString());
                     break;
                 default:
                     line = linePrefix + kt.getTemplate();

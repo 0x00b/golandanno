@@ -1,16 +1,16 @@
 package org.ago.goan.anno.impl.funcAnno;
 
+import org.ago.goan.anno.Context;
+
 public interface Template {
 
-    String generate(goFunc func, String linePrefix, String selectedCode);
+    String generate(Context ctx, goFunc func, String linePrefix, String selectedCode);
 
     // default template code
     String DefaultFuncTemplate = "// ${function_name} TODO\n" +
-            "// @receiver ${receiver_name_type}: \n" +
-            "// @param ${param_name_type}: \n" +
-            "// @return ${ret_name_type}: \n";
-
-    String FUNC_TEMPLATE_KEY = "GoAn.Edit.FuncTemplate";
+            "// receiver ${receiver_name} \n" +
+            "// param ${param_name} \n" +
+            "// return ${ret_name} \n";
 
     // current method name
     String FUNCTION_NAME = "${function_name}";
@@ -35,38 +35,33 @@ public interface Template {
     String RET_NAME = "${ret_name}";
     // return type
     String RET_TYPE = "${ret_type}";
-
-    // current date in "yyyy-MM-dd HH:mm:ss"
-    String DATE = "${date}";
-
-
 }
 
-//${function_name} TODO
-//@receiver ${receiver_name_type}:
-//@param ${param_name_type}:
-//@return ${ret_name_type}:
+// ${function_name} TODO
+// @receiver ${receiver_name_type}:
+// @param ${param_name_type}:
+// @return ${ret_name_type}:
 
-//${function_name} TODO
-//@receiver ${receiver_name}:
-//@param ${param_name}:
-//@return ${ret_name}:
+// ${function_name} TODO
+// @receiver ${receiver_name}:
+// @param ${param_name}:
+// @return ${ret_name}:
 
-//${function_name} TODO
-//@receiver ${receiver_type}:
-//@param ${param_type}:
-//@return ${ret_type}:
+// ${function_name} TODO
+// @receiver ${receiver_type}:
+// @param ${param_type}:
+// @return ${ret_type}:
 
-/*${function_name} TODO
- *@receiver ${receiver_name_type}:
- *@param ${param_name_type}:
- *@return ${ret_name_type}: */
+/* ${function_name} TODO
+ * @receiver ${receiver_name_type}:
+ * @param ${param_name_type}:
+ * @return ${ret_name_type}: */
 
 /*
- *${function_name} TODO
- *@receiver ${receiver_name_type}:
- *@param ${param_name_type}:
- *@return ${ret_name_type}: */
+ * ${function_name} TODO
+ * @receiver ${receiver_name_type}:
+ * @param ${param_name_type}:
+ * @return ${ret_name_type}: */
 
 /**
  * ${function_name} TODO
