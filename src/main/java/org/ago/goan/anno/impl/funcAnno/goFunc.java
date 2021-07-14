@@ -21,6 +21,8 @@ public class goFunc {
         autoComplete(Returns);
     }
 
+    //自动补全参数的name和type
+    //使用后面的type来作为前面无type的参数的type
     public static void autoComplete(List<Variable> list) {
         if (null == list || list.isEmpty()) {
             return;
@@ -42,6 +44,12 @@ public class goFunc {
 
 
     public Variable getReceiver() {
+        if (Receiver == null) {
+            return null;
+        }
+        if (StringUtils.isBlank(Receiver.getName()) && StringUtils.isBlank(Receiver.getType())) {
+            return null;
+        }
         return Receiver;
     }
 

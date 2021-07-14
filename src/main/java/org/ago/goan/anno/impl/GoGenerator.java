@@ -27,7 +27,7 @@ public class GoGenerator implements org.ago.goan.anno.Annotator {
             anno = annotatorList.get(i);
             res = anno.detect(ctx);
             if (null != res) {
-                annotation = anno.generate(ctx, res, ctx.SelectCode);
+                annotation = anno.generate(ctx, res);
                 break;
             }
         }
@@ -36,43 +36,48 @@ public class GoGenerator implements org.ago.goan.anno.Annotator {
             return;
         }
 
-        insertAnnotation(ctx, res, annotation);
+        replaceAnnotation(ctx, res, annotation);
 
         return;
     }
 
 
-    void insertAnnotation(Context ctx, DetectResult result, String annotation) {
- 
+    void replaceAnnotation(Context ctx, DetectResult result, String annotation) {
 
-        if (ctx.SelectStart < ctx.SelectEnd) {
-            int upLineStart = ctx.document.getLineStartOffset(ctx.caretModel.getLogicalPosition().line - 1);
-            int upLineEnd = ctx.document.getLineEndOffset(ctx.caretModel.getLogicalPosition().line - 1);
+
+        if (ctx.code.annotation.find) {
+            int upLineStart = ctx.document.getLineStartOffset(ctx.code.annotation.startLine - 1);
+            int upLineEnd = ctx.document.getLineEndOffset(ctx.code.annotation.startLine - 1);
             String upCode = ctx.content.substring(upLineStart, upLineEnd);
             if (!StringUtils.isBlank(upCode)) {
                 annotation = "\n" + annotation;
             }
             final String finalAnnotation = annotation;
-            WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.replaceString(ctx.SelectStart , ctx.SelectEnd, finalAnnotation));
+
+            int start = ctx.document.getLineStartOffset(ctx.code.annotation.startLine);
+            int end = ctx.document.getLineEndOffset(ctx.code.annotation.endLine);
+            WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.replaceString(start, end, finalAnnotation));
             return;
         }
 
-        int upLineStart = ctx.document.getLineStartOffset(result.getStartLine() - 1);
-        int upLineEnd = ctx.document.getLineEndOffset(result.getStartLine() - 1);
+        int upLineStart = ctx.document.getLineStartOffset(result.startLine - 1);
+        int upLineEnd = ctx.document.getLineEndOffset(result.startLine - 1);
         String upCode = ctx.content.substring(upLineStart, upLineEnd);
         if (!StringUtils.isBlank(upCode)) {
             annotation = "\n\n" + annotation;
         } else {
-            upLineStart = ctx.document.getLineStartOffset(result.getStartLine() - 2);
-            upLineEnd = ctx.document.getLineEndOffset(result.getStartLine() - 2);
-            upCode = ctx.content.substring(upLineStart, upLineEnd);
+            int upTwoLineStart = ctx.document.getLineStartOffset(result.startLine - 2);
+            int upTwoLineEnd = ctx.document.getLineEndOffset(result.startLine - 2);
+            upCode = ctx.content.substring(upTwoLineStart, upTwoLineEnd);
             if (!StringUtils.isBlank(upCode)) {
                 annotation = "\n" + annotation;
+            } else {
+                WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.replaceString(upLineStart, upLineEnd, ""));
             }
         }
 
         final String finalAnnotation = annotation;
-        int offset = ctx.document.getLineEndOffset(result.getStartLine() - 1);
+        int offset = ctx.document.getLineEndOffset(result.startLine - 1);
         WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.insertString(offset, finalAnnotation));
     }
 

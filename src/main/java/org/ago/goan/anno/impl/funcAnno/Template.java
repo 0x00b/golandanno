@@ -4,16 +4,16 @@ import org.ago.goan.anno.Context;
 
 public interface Template {
 
-    String generate(Context ctx, goFunc func, String linePrefix, String selectedCode);
+    String generate(Context ctx, goFunc func, String linePrefix);
 
     // default template code
-    String DefaultFuncTemplate = "// ${function_name} TODO\n" +
-            "// receiver ${receiver_name} \n" +
-            "// param ${param_name} \n" +
-            "// return ${ret_name} \n";
+    String DefaultFuncTemplate = "// ${func_name} \n" +
+            "//  @receiver ${receiver_name} \n" +
+            "//  @param ${param_name} \n" +
+            "//  @return ${return_name} \n";
 
     // current method name
-    String FUNCTION_NAME = "${function_name}";
+    String FUNCTION_NAME = "${func_name}";
 
     // golang receiver
     String RECEIVER_NAME_TYPE = "${receiver_name_type}";
@@ -30,54 +30,91 @@ public interface Template {
     String PARAM_TYPE = "${param_type}";
 
     // return info
-    String RET_NAME_TYPE = "${ret_name_type}";
-    // return name
-    String RET_NAME = "${ret_name}";
+    String RET_NAME_TYPE = "${return_name_type}";
+    // return name//    public List<LineTemplate> parse(String template) {
+    ////
+    ////        template = StringUtils.trim(template);
+    ////        List<LineTemplate> list = new ArrayList<LineTemplate>();
+    ////        if (!template.startsWith("//") || !template.startsWith("/*")){
+    ////            return list;
+    ////        }
+    ////
+    ////        if (template.startsWith("/*")) {
+    ////            ///*
+    ////            // aaa*/
+    ////            AnnotateType = 1;
+    ////            template = template.substring(2, template.lastIndexOf("*/"));
+    ////            if (template.charAt(template.length() - 1) == '\n') {
+    ////                // /*
+    ////                // * aaa
+    ////                // */
+    ////                AnnotateType = 2;
+    ////            }
+    ////        }
+    ////
+    ////        String[] lines = template.split("\n");
+    ////
+    ////        for (int i = 0; i < lines.length; i++) {
+    ////            int j = 0;
+    ////            LineTemplate kt = new LineTemplate();
+    ////            kt.lineTemplate = lines[i];
+    ////            for (; j < Keys.length; j++) {
+    ////                if (lines[i].contains(Keys[j])) {
+    ////                    if (kt.keys == null) {
+    ////                        kt.keys = new ArrayList<>();
+    ////                    }
+    ////                    kt.keys.add(Keys[i]);
+    ////                }
+    ////            }
+    ////            list.add(kt);
+    ////        }
+    ////        return list;
+    String RET_NAME = "${return_name}";
     // return type
-    String RET_TYPE = "${ret_type}";
+    String RET_TYPE = "${return_type}";
 }
 
-// ${function_name} TODO
+// ${func_name} 
 // @receiver ${receiver_name_type}:
 // @param ${param_name_type}:
-// @return ${ret_name_type}:
+// @return ${return_name_type}:
 
-// ${function_name} TODO
+// ${func_name} 
 // @receiver ${receiver_name}:
 // @param ${param_name}:
-// @return ${ret_name}:
+// @return ${return_name}:
 
-// ${function_name} TODO
+// ${func_name} 
 // @receiver ${receiver_type}:
 // @param ${param_type}:
-// @return ${ret_type}:
+// @return ${return_type}:
 
-/* ${function_name} TODO
+/* ${func_name} 
  * @receiver ${receiver_name_type}:
  * @param ${param_name_type}:
- * @return ${ret_name_type}: */
+ * @return ${return_name_type}: */
 
 /*
- * ${function_name} TODO
+ * ${func_name} 
  * @receiver ${receiver_name_type}:
  * @param ${param_name_type}:
- * @return ${ret_name_type}: */
+ * @return ${return_name_type}: */
 
 /**
- * ${function_name} TODO
+ * ${func_name} 
  * *@receiver ${receiver_name_type}:
  * *@param ${param_name_type}:
- * *@return ${ret_name_type}:
+ * *@return ${return_name_type}:
  * <p>
- * *${function_name} TODO
+ * *${func_name} 
  * *@receiver ${receiver_name_type}:
  * *@param ${param_name_type}:
- * *@return ${ret_name_type}:
+ * *@return ${return_name_type}:
  **/
 
 /**
- **${function_name} TODO
+ **${func_name} 
  **@receiver ${receiver_name_type}:
  **@param ${param_name_type}:
- **@return ${ret_name_type}:
+ **@return ${return_name_type}:
  **/

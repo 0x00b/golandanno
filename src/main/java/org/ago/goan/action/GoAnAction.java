@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.project.Project;
-import org.ago.goan.anno.CommonTemplate;
+import org.ago.goan.anno.Template;
 import org.ago.goan.anno.Context;
 import org.ago.goan.anno.impl.GoGenerator;
 import org.ago.goan.anno.impl.funcAnno.funcAnnotatorImpl;
@@ -61,28 +61,31 @@ public class GoAnAction extends AnAction {
         context.document = document;
         context.content = content;
 
-        context.SelectStart = editor.getSelectionModel().getSelectionStart();
-        context.SelectEnd = editor.getSelectionModel().getSelectionEnd();
-        context.SelectCode = content.substring(context.SelectStart, context.SelectEnd);
+        context.selectStart = editor.getSelectionModel().getSelectionStart();
+        context.selectEnd = editor.getSelectionModel().getSelectionEnd();
+        context.selectCode = content.substring(context.selectStart, context.selectEnd);
 
-        context.commonTemplate = new CommonTemplate();
-        context.commonTemplate.date = new Date().toString();
+        context.template = new Template();
+        context.template.date = new Date().toString();
         try {
             Process p = Runtime.getRuntime().exec("git config user.name");
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line = "";
             if ((line = reader.readLine()) != null) {
-                context.commonTemplate.gitName = line;
+                context.template.gitName = line;
             }
         } catch (IOException err) {
             err.printStackTrace();
         }
 
-        System.out.println(context.commonTemplate.date);
-        System.out.println(context.commonTemplate.gitName);
+        System.out.println(context.template.date);
+        System.out.println(context.template.gitName);
 
 
         context.code = StringUtils.findCodeStart(context);
+        if (!context.code.find){
+            return;
+        }
 
         annotator.generate(context);
 

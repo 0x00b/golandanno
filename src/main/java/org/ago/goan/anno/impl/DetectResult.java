@@ -3,47 +3,11 @@ package org.ago.goan.anno.impl;
 
 public class DetectResult {
     //是否命中类型
-    String code;
+    public String code;
     //code的起始行
-    int StartLine;
+    public int startLine;
 
-    Object Result;
+    public Object result;
 
-    String linePrefix;
-
-    public String getLinePrefix() {
-        return linePrefix;
-    }
-
-    public void setLinePrefix(String linePrefix) {
-        this.linePrefix = linePrefix;
-    }
-
-
-    public int getStartLine() {
-        return StartLine;
-    }
-
-    public void setStartLine(int startLine) {
-        StartLine = startLine;
-    }
-
-    public Object getResult() {
-        return Result;
-    }
-
-    public void setResult(Object result) {
-        Result = result;
-    }
-
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-
+    public String linePrefix;
 }

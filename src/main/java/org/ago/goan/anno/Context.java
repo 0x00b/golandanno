@@ -16,9 +16,9 @@ public class Context {
 
     public FindCodeResult code;
 
-    public int SelectStart;
-    public int SelectEnd;
-    public String SelectCode;
+    public int selectStart;
+    public int selectEnd;
+    public String selectCode;
 
-    public CommonTemplate commonTemplate;
+    public Template template;
 }

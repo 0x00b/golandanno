@@ -27,18 +27,18 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     @Override
     public DetectResult detect(Context ctx) {
 
-         goFunc func = parse(ctx.code.Code);
+        goFunc func = parse(ctx.code.code);
         if (func == null) {
             return null;
         }
-        String funcCode = ctx.code.Code;
+        String funcCode = ctx.code.code;
         DetectResult res = new DetectResult();
-        res.setResult(func);
-        res.setCode(funcCode);
-         res.setStartLine(ctx.code.StartLine);
+        res.result = func;
+        res.code = funcCode;
+        res.startLine = ctx.code.startLine;
         Matcher match = Pattern.compile("^(\\s*)\\w+").matcher(funcCode);
         if (match.find()) {
-            res.setLinePrefix(match.group(1));
+            res.linePrefix = match.group(1);
         }
 
         return res;
@@ -74,11 +74,11 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     }
 
     @Override
-    public String generate(Context ctx, DetectResult result, String selectedCode) {
+    public String generate(Context ctx, DetectResult result) {
 
-        if (result.getResult().getClass().equals(goFunc.class)) {
-            goFunc func = (goFunc) result.getResult();
-            return template.generate(ctx, func, result.getLinePrefix(), selectedCode);
+        if (result.result.getClass().equals(goFunc.class)) {
+            goFunc func = (goFunc) result.result;
+            return template.generate(ctx, func, result.linePrefix);
         }
 
         return "";

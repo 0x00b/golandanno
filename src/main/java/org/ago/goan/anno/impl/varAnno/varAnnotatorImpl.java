@@ -15,7 +15,7 @@ public class varAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     @Override
     public DetectResult detect(Context ctx) {
 
-        String typeCode = ctx.code.Code;
+        String typeCode = ctx.code.code;
 
         GoType f = new GoType();
         Matcher funcRegexMatcher = varRegexPattern.matcher(typeCode);
@@ -26,24 +26,24 @@ public class varAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
         f.setName(funcRegexMatcher.group(1));
         f.setType(funcRegexMatcher.group(2));
         DetectResult res = new DetectResult();
-        res.setResult(f);
-         res.setStartLine(ctx.code.StartLine);
-        res.setCode(typeCode);
+        res.result = (f);
+         res.startLine = (ctx.code.startLine);
+        res.code = (typeCode);
         Matcher match = Pattern.compile("^(\\s*)\\w+").matcher(typeCode);
         if (match.find()) {
-            res.setLinePrefix(match.group(1));
+            res.linePrefix = (match.group(1));
         }
 
         return res;
     }
 
     @Override
-    public String generate(Context ctx, DetectResult result, String selectedCode) {
+    public String generate(Context ctx, DetectResult result) {
 
-        if (result.getResult().getClass().equals(GoType.class)) {
-            GoType type = (GoType) result.getResult();
+        if (result.result.getClass().equals(GoType.class)) {
+            GoType type = (GoType) result.result;
 
-            return String.format(result.getLinePrefix() + "//%s TODO", type.getName());
+            return String.format(result.linePrefix + "//%s TODO", type.getName());
         }
 
         return "";

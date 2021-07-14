@@ -10,6 +10,9 @@ public class Variable {
     String Type;
 
     public String getName() {
+        if (Name == null) {
+            return "";
+        }
         return Name;
     }
 
@@ -18,6 +21,9 @@ public class Variable {
     }
 
     public String getType() {
+        if (Type == null) {
+            return "";
+        }
         return Type;
     }
 
@@ -26,10 +32,10 @@ public class Variable {
     }
 
     public static Variable ParseString(String code) {
-        Variable variable = new Variable();
-        if (null == code) {
-            return variable;
+        if (StringUtils.isBlank(code)) {
+            return null;
         }
+        Variable variable = new Variable();
         code = StringUtils.trim(code);
         if (code == null) {
             return variable;
@@ -49,7 +55,7 @@ public class Variable {
     }
 
     public static List<Variable> ParseArrayString(String code) {
-        if (code == null) {
+        if (StringUtils.isBlank(code)) {
             return null;
         }
         String[] params = code.split(",");

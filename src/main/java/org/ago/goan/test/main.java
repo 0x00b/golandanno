@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.ago.goan.anno.impl.funcAnno.Template;
 import org.ago.goan.anno.impl.funcAnno.TemplateImpl;
@@ -41,12 +40,12 @@ public class main {
 
         for (int j = 0; j < templates.length; j++) {
             System.out.println("==============================================");
-            List<TemplateImpl.KeyTemplate> list = t.parse(templates[j]);
-            System.out.println(t.getAnnotateType());
-            for (int i = 0; i < list.size(); i++) {
-                System.out.println(list.get(i).getKey() + ":" + list.get(i).getTemplate());
-            }
-            System.out.println("==============================================");
+//            List<TemplateImpl.LineTemplate> list = t.parse(templates[j]);
+//            System.out.println(t.getAnnotateType());
+//            for (int i = 0; i < list.size(); i++) {
+//                System.out.println(list.get(i).keys + ":" + list.get(i).lineTemplate);
+//            }
+//            System.out.println("==============================================");
         }
 
     }
