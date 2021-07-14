@@ -34,7 +34,7 @@ public class packageAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator 
         LineUpdate,
     }
 
-    public class LineTemplate {
+    public static class LineTemplate {
         public List<String> keys;
         public String lineTemplate;
         public LineType type;
@@ -98,8 +98,7 @@ public class packageAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator 
             if (StringUtils.isBlank(annotation)) {
                 return null;
             }
-//            annotation = annotation.substring(0, annotation.length() - "\n".length());
-//        annotation = annotation.replaceAll("\\s+$", "");
+            annotation = annotation.substring(0, annotation.length() - "\n".length());
 
             if (annotateType == 1 || annotateType == 2) {
                 annotation = "/*" + annotation;

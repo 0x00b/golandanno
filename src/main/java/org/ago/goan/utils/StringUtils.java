@@ -126,7 +126,7 @@ public class StringUtils {
 
         FindCodeResult.Annotation ann = findCodeAnnotation(ctx, lines, lineNumber);
         if (!ann.find) {
-            if (lineNumber > 1) {
+            if (lineNumber >= 1) {
                 ann = findCodeAnnotation(ctx, lines, lineNumber - 1);
             }
         }

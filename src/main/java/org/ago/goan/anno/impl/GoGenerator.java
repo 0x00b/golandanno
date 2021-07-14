@@ -46,7 +46,7 @@ public class GoGenerator implements org.ago.goan.anno.Annotator {
 
 
         if (ctx.code.annotation.find) {
-            if (ctx.code.annotation.startLine>1){
+            if (ctx.code.annotation.startLine >= 1) {
                 int upLineStart = ctx.document.getLineStartOffset(ctx.code.annotation.startLine - 1);
                 int upLineEnd = ctx.document.getLineEndOffset(ctx.code.annotation.startLine - 1);
                 String upCode = ctx.content.substring(upLineStart, upLineEnd);
@@ -62,13 +62,13 @@ public class GoGenerator implements org.ago.goan.anno.Annotator {
             return;
         }
 
-        if (result.startLine > 1) {
+        if (result.startLine >= 1) {
             int upLineStart = ctx.document.getLineStartOffset(result.startLine - 1);
             int upLineEnd = ctx.document.getLineEndOffset(result.startLine - 1);
             String upCode = ctx.content.substring(upLineStart, upLineEnd);
             if (!StringUtils.isBlank(upCode)) {
                 annotation = "\n\n" + annotation;
-            } else if (result.startLine > 2) {
+            } else if (result.startLine >= 2) {
                 int upTwoLineStart = ctx.document.getLineStartOffset(result.startLine - 2);
                 int upTwoLineEnd = ctx.document.getLineEndOffset(result.startLine - 2);
                 upCode = ctx.content.substring(upTwoLineStart, upTwoLineEnd);
@@ -83,7 +83,7 @@ public class GoGenerator implements org.ago.goan.anno.Annotator {
             int offset = ctx.document.getLineEndOffset(result.startLine - 1);
             WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.insertString(offset, finalAnnotation));
         } else {
-            final String finalAnnotation = annotation;
+            final String finalAnnotation = annotation + "\n";
             WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.insertString(0, finalAnnotation));
         }
     }
