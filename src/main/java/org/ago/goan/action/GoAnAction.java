@@ -10,6 +10,7 @@ import org.ago.goan.anno.Context;
 import org.ago.goan.anno.impl.GoGenerator;
 import org.ago.goan.anno.impl.funcAnno.funcAnnotatorImpl;
 import org.ago.goan.anno.Annotator;
+import org.ago.goan.anno.impl.packageAnno.packageAnnotatorImpl;
 import org.ago.goan.anno.impl.typeAnno.typeAnnotatorImpl;
 import org.ago.goan.anno.impl.varAnno.varAnnotatorImpl;
 import org.ago.goan.utils.StringUtils;
@@ -49,6 +50,7 @@ public class GoAnAction extends AnAction {
         String content = document.getText();
         GoGenerator go = new GoGenerator();
         go.addAnnotatorList(new funcAnnotatorImpl());
+        go.addAnnotatorList(new packageAnnotatorImpl());
         go.addAnnotatorList(new typeAnnotatorImpl());
         go.addAnnotatorList(new varAnnotatorImpl());
 

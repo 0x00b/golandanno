@@ -46,11 +46,13 @@ public class GoGenerator implements org.ago.goan.anno.Annotator {
 
 
         if (ctx.code.annotation.find) {
-            int upLineStart = ctx.document.getLineStartOffset(ctx.code.annotation.startLine - 1);
-            int upLineEnd = ctx.document.getLineEndOffset(ctx.code.annotation.startLine - 1);
-            String upCode = ctx.content.substring(upLineStart, upLineEnd);
-            if (!StringUtils.isBlank(upCode)) {
-                annotation = "\n" + annotation;
+            if (ctx.code.annotation.startLine>1){
+                int upLineStart = ctx.document.getLineStartOffset(ctx.code.annotation.startLine - 1);
+                int upLineEnd = ctx.document.getLineEndOffset(ctx.code.annotation.startLine - 1);
+                String upCode = ctx.content.substring(upLineStart, upLineEnd);
+                if (!StringUtils.isBlank(upCode)) {
+                    annotation = "\n" + annotation;
+                }
             }
             final String finalAnnotation = annotation;
 
@@ -60,25 +62,30 @@ public class GoGenerator implements org.ago.goan.anno.Annotator {
             return;
         }
 
-        int upLineStart = ctx.document.getLineStartOffset(result.startLine - 1);
-        int upLineEnd = ctx.document.getLineEndOffset(result.startLine - 1);
-        String upCode = ctx.content.substring(upLineStart, upLineEnd);
-        if (!StringUtils.isBlank(upCode)) {
-            annotation = "\n\n" + annotation;
-        } else {
-            int upTwoLineStart = ctx.document.getLineStartOffset(result.startLine - 2);
-            int upTwoLineEnd = ctx.document.getLineEndOffset(result.startLine - 2);
-            upCode = ctx.content.substring(upTwoLineStart, upTwoLineEnd);
+        if (result.startLine > 1) {
+            int upLineStart = ctx.document.getLineStartOffset(result.startLine - 1);
+            int upLineEnd = ctx.document.getLineEndOffset(result.startLine - 1);
+            String upCode = ctx.content.substring(upLineStart, upLineEnd);
             if (!StringUtils.isBlank(upCode)) {
-                annotation = "\n" + annotation;
-            } else {
-                WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.replaceString(upLineStart, upLineEnd, ""));
+                annotation = "\n\n" + annotation;
+            } else if (result.startLine > 2) {
+                int upTwoLineStart = ctx.document.getLineStartOffset(result.startLine - 2);
+                int upTwoLineEnd = ctx.document.getLineEndOffset(result.startLine - 2);
+                upCode = ctx.content.substring(upTwoLineStart, upTwoLineEnd);
+                if (!StringUtils.isBlank(upCode)) {
+                    annotation = "\n" + annotation;
+                } else {
+                    WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.replaceString(upLineStart, upLineEnd, ""));
+                }
             }
-        }
 
-        final String finalAnnotation = annotation;
-        int offset = ctx.document.getLineEndOffset(result.startLine - 1);
-        WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.insertString(offset, finalAnnotation));
+            final String finalAnnotation = annotation;
+            int offset = ctx.document.getLineEndOffset(result.startLine - 1);
+            WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.insertString(offset, finalAnnotation));
+        } else {
+            final String finalAnnotation = annotation;
+            WriteCommandAction.runWriteCommandAction(ctx.project, () -> ctx.document.insertString(0, finalAnnotation));
+        }
     }
 
 

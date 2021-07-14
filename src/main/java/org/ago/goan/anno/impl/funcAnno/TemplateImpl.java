@@ -196,12 +196,12 @@ public class TemplateImpl implements org.ago.goan.anno.impl.funcAnno.Template {
         if (firstLine && originAnnotation != null && originAnnotation.size() == 1 &&
                 StringUtils.matchReg(lineTemplate.lineTemplate, "^\\s*(?://|/\\*)\\s*\\$\\{func_name\\}")) {
             String origin = originAnnotation.get(0);
-            if ( StringUtils.matchReg(origin, "^\\s*(?://|/\\*)\\s*" + func.Name)){
+            if (StringUtils.matchReg(origin, "^\\s*(?://|/\\*)\\s*" + func.Name)) {
                 Matcher m = Pattern.compile("^\\s*(?://|/\\*)\\s*" + func.Name + "\\s*(.*)").matcher(origin);
                 if (m.find() && !StringUtils.isBlank(m.group(1))) {
                     content = origin.substring(origin.indexOf(m.group(1)));
                 }
-            }else{
+            } else {
                 //满足go规范的注释模版，如果原来的不满足，则直接用原来的注释补充第一行
                 content = origin.trim().substring(2).trim();
             }
@@ -223,8 +223,11 @@ public class TemplateImpl implements org.ago.goan.anno.impl.funcAnno.Template {
             return "";
         }
 
+        line = line.replace("{", "\\{").replace("}", "\\}").replace(".", "\\.").
+                replace("*", "\\*").replace("[", "\\[").replace("]", "\\]");
+        String reg = line.replaceAll("\\s+", "\\\\s*") + "(.+)";
+
         for (String s : originAnnotation) {
-            String reg = line.replaceAll("\\s+", "\\\\s*") + "(.+)";
             Matcher matcher = Pattern.compile(reg).matcher(s);
             if (matcher.find()) {
                 String t = matcher.group(1);

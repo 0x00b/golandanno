@@ -7,7 +7,7 @@ public interface PackageTemplate {
     String generate(goFunc func, String linePrefix, String selectedCode);
 
     // default template code
-    String DefaultPackageTemplate = "// Package ${package_name} TODO\n";
+    String DefaultPackageTemplate = "// Package ${package_name} \n";
 
     String PACKAGE_NAME = "${package_name}";
 }
