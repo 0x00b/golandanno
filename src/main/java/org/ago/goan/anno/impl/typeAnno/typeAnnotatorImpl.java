@@ -1,8 +1,10 @@
 package org.ago.goan.anno.impl.typeAnno;
 
 import org.ago.goan.anno.Context;
+import org.ago.goan.anno.Template;
 import org.ago.goan.anno.impl.DetectResult;
 import org.ago.goan.anno.impl.GoType;
+import org.ago.goan.anno.impl.packageAnno.PackageTemplate;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,6 +13,14 @@ public class typeAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
 
     // match "type XXX ..."
     public static Pattern typeRegexPattern = Pattern.compile("^\\s*type\\s*(\\w+)\\s*(\\w+)\\s*");
+
+    Template template;
+
+    public typeAnnotatorImpl() {
+        super();
+        template = new TypeTemplate();
+    }
+
 
     @Override
     public DetectResult detect(Context ctx) {
@@ -37,14 +47,7 @@ public class typeAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
 
     @Override
     public String generate(Context ctx, DetectResult result) {
-
-        if (result.result.getClass().equals(GoType.class)) {
-            GoType type = (GoType) result.result;
-
-            return String.format(result.linePrefix + "//%s TODO", type.getName());
-        }
-
-        return "";
+        return template.generate(ctx,result);
     }
 
 }

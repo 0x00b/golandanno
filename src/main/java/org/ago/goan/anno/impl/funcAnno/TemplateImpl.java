@@ -4,6 +4,7 @@ import com.google.errorprone.annotations.Var;
 import com.intellij.ide.util.PropertiesComponent;
 import org.ago.goan.anno.Template;
 import org.ago.goan.anno.Context;
+import org.ago.goan.anno.impl.DetectResult;
 import org.ago.goan.anno.impl.Variable;
 import org.ago.goan.cust.Constant;
 import org.ago.goan.utils.StringUtils;
@@ -12,7 +13,37 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TemplateImpl implements org.ago.goan.anno.impl.funcAnno.Template {
+public class TemplateImpl extends Template {
+
+    // default template code
+    public static final String DefaultFuncTemplate = "// ${func_name} \n" +
+            "//  @receiver ${receiver_name} \n" +
+            "//  @param ${param_name} \n" +
+            "//  @return ${return_name} \n";
+
+    // current method name
+    final String FUNCTION_NAME = "${func_name}";
+
+    // golang receiver
+    final String RECEIVER_NAME_TYPE = "${receiver_name_type}";
+    // golang receiver name
+    final String RECEIVER_NAME = "${receiver_name}";
+    // golang receiver type
+    final String RECEIVER_TYPE = "${receiver_type}";
+
+    // param info
+    final String PARAM_NAME_TYPE = "${param_name_type}";
+    // param name info
+    final String PARAM_NAME = "${param_name}";
+    // param info
+    final String PARAM_TYPE = "${param_type}";
+
+    // return info
+    final String RET_NAME_TYPE = "${return_name_type}";
+    // return name
+    final String RET_NAME = "${return_name}";
+    // return type
+    final String RET_TYPE = "${return_type}";
 
     String[] Keys = new String[]{
             FUNCTION_NAME,
@@ -35,95 +66,51 @@ public class TemplateImpl implements org.ago.goan.anno.impl.funcAnno.Template {
     public final static String Receiver = "@receiver";
     public final static String Param = "@param";
     public final static String Return = "@return";
-    public final static String Update = "@update";
 
-    enum LineType {
-        Line,
-        LineReceiver,
-        LineParam,
-        LineReturn,
-        LineUpdate,
-    }
+    private static final int LineReceiver = 2;
+    private static final int LineParam = 3;
+    private static final int LineReturn = 4;
 
-    public class LineTemplate {
-        public List<String> keys;
-        public String lineTemplate;
-        public LineType type;
-    }
-
-    public List<LineTemplate> parseTemplate(Context ctx, String template) {
-
-//        template = StringUtils.trim(template);
-        List<LineTemplate> list = new ArrayList<LineTemplate>();
-        if (!template.startsWith("//") && !template.startsWith("/*")) {
-            return list;
-        }
-
-        if (template.startsWith("/*")) {
-            ///*
-            // aaa*/
-            annotateType = 1;
-            template = template.substring(2, template.lastIndexOf("*/"));
-            if (template.charAt(template.length() - 1) == '\n') {
-                // /*
-                // * aaa
-                // */
-                annotateType = 2;
-            }
-        }
-
-        String[] lines = template.split("\n");
-
-        for (int i = 0; i < lines.length; i++) {
-            LineTemplate kt = new LineTemplate();
-            kt.lineTemplate = lines[i];
-            kt.type = lineType(kt.lineTemplate);
-
-            for (int j = 0; j < Keys.length; j++) {
-                if (lines[i].contains(Keys[j])) {
-                    if (kt.keys == null) {
-                        kt.keys = new ArrayList<>();
-                    }
-                    kt.keys.add(Keys[j]);
-                }
-            }
-            list.add(kt);
-        }
-        return list;
-    }
-
-    public LineType lineType(String line) {
+    @Override
+    public int lineType(String line) {
         if (line.contains(Receiver)) {
-            return LineType.LineReceiver;
+            return LineReceiver;
         }
         if (line.contains(Param)) {
-            return LineType.LineParam;
+            return LineParam;
         }
         if (line.contains(Return)) {
-            return LineType.LineReturn;
+            return LineReturn;
         }
         if (line.contains(Update)) {
-            return LineType.LineUpdate;
+            return LineUpdate;
         }
-        return LineType.Line;
+        return LineType;
     }
 
     // 记住一个原则，go的参数type一定会有，name不一定有
-    @Override
-    public String generate(Context ctx, goFunc func, String linePrefix) {
+//    @Override
+    public String generate(Context ctx, DetectResult result) {
+
+        if (!result.result.getClass().equals(goFunc.class)) {
+            return "";
+        }
+
+        goFunc func = (goFunc) result.result;
 
         List<String> originAnnotation = null;
         if (ctx.code.annotation.find) {
             originAnnotation = parseOriginAnnotation(ctx);
         }
+        String linePrefix = result.linePrefix;
 
         String template = PropertiesComponent.getInstance().getValue(Constant.FUNC_TEMPLATE_KEY);
 
         if (template == null || StringUtils.isBlank(template)) {
-            template = org.ago.goan.anno.impl.funcAnno.Template.DefaultFuncTemplate;
+            template = DefaultFuncTemplate;
         }
 
-        List<LineTemplate> lineTemplates = parseTemplate(ctx, template);
+        List<LineTemplate> lineTemplates = parseTemplate(ctx, Keys, template);
         if (null == lineTemplates) {
             return "";
         }
@@ -157,7 +144,7 @@ public class TemplateImpl implements org.ago.goan.anno.impl.funcAnno.Template {
                     if (func.getReceiver() == null) {
                         break;
                     }
-                case Line:
+                case LineType:
                 case LineUpdate:
                 default:
                     line = replaceKey(ctx, func, lineTemplate);
@@ -210,7 +197,7 @@ public class TemplateImpl implements org.ago.goan.anno.impl.funcAnno.Template {
             content = originContent(ctx, originAnnotation, line);
         }
 
-//        content.split("\n");
+//      content.split("\n");
 
         annotation += linePrefix + line + content;
 
@@ -218,58 +205,6 @@ public class TemplateImpl implements org.ago.goan.anno.impl.funcAnno.Template {
 
     }
 
-    String originContent(Context ctx, List<String> originAnnotation, String line) {
-        if (originAnnotation == null) {
-            return "";
-        }
-
-        line = line.replace("{", "\\{").replace("}", "\\}").replace(".", "\\.").
-                replace("*", "\\*").replace("[", "\\[").replace("]", "\\]");
-        String reg = line.replaceAll("\\s+", "\\\\s*") + "(.+)";
-
-        for (String s : originAnnotation) {
-            Matcher matcher = Pattern.compile(reg).matcher(s);
-            if (matcher.find()) {
-                String t = matcher.group(1);
-                if (StringUtils.isBlank(t)) {
-                    return "";
-                }
-                return s.substring(s.indexOf(t));
-            }
-        }
-
-        return "";
-    }
-
-    List<String> parseOriginAnnotation(Context ctx) {
-        if (!ctx.code.annotation.find) {
-            return null;
-
-        }
-        String content = ctx.code.annotation.annotation;
-        String[] lines = content.split("\n");
-        if (lines.length == 0) {
-            return null;
-        }
-
-        List<String> annotations = new ArrayList<>();
-
-        int current = 0;
-        annotations.add(lines[0]);
-
-
-        for (int i = 1; i < lines.length; i++) {
-            LineType type = lineType(lines[i]);
-            if (type == LineType.Line) {
-                annotations.set(current, annotations.get(current) + "\n" + lines[i]);
-                continue;
-            }
-            current++;
-            annotations.add(lines[i]);
-        }
-
-        return annotations;
-    }
 
     public String replaceVariablesKey(Context ctx, String line, goFunc func, LineTemplate lineTemplate, Variable variable) {
 
@@ -359,9 +294,9 @@ public class TemplateImpl implements org.ago.goan.anno.impl.funcAnno.Template {
                     line = line.replace(RECEIVER_TYPE, func.getReceiver().getType());
                     break;
                 case Template.DATE:
-                    line = line.replace(Template.DATE, ctx.template.date);
+                    line = line.replace(Template.DATE, ctx.date);
                 case Template.GIT_NAME:
-                    line = line.replace(Template.GIT_NAME, ctx.template.gitName);
+                    line = line.replace(Template.GIT_NAME, ctx.gitName);
                 default:
             }
         }

@@ -20,5 +20,6 @@ public class Context {
     public int selectEnd;
     public String selectCode;
 
-    public Template template;
+    public String date;
+    public String gitName;
 }

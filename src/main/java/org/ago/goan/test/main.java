@@ -3,10 +3,8 @@ package org.ago.goan.test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 import java.util.regex.Matcher;
 
-import org.ago.goan.anno.impl.funcAnno.Template;
 import org.ago.goan.anno.impl.funcAnno.TemplateImpl;
 import org.ago.goan.anno.impl.funcAnno.funcAnnotatorImpl;
 import org.ago.goan.anno.impl.typeAnno.typeAnnotatorImpl;
@@ -19,7 +17,7 @@ public class main {
 
 
         String[] templates = new String[]{
-                Template.DefaultFuncTemplate,
+                t.DefaultFuncTemplate,
 
                 "/*${function_name} TODO\n" +
                         "*@receiver ${receiver_name_type}: \n" +

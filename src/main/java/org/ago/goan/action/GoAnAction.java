@@ -67,21 +67,20 @@ public class GoAnAction extends AnAction {
         context.selectEnd = editor.getSelectionModel().getSelectionEnd();
         context.selectCode = content.substring(context.selectStart, context.selectEnd);
 
-        context.template = new Template();
-        context.template.date = new Date().toString();
+        context.date = new Date().toString();
         try {
             Process p = Runtime.getRuntime().exec("git config user.name");
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line = "";
             if ((line = reader.readLine()) != null) {
-                context.template.gitName = line;
+                context.gitName = line;
             }
         } catch (IOException err) {
             err.printStackTrace();
         }
 
-        System.out.println(context.template.date);
-        System.out.println(context.template.gitName);
+        System.out.println(context.date);
+        System.out.println(context.gitName);
 
 
         context.code = StringUtils.findCodeStart(context);

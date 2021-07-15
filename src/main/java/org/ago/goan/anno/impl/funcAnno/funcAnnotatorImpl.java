@@ -3,7 +3,7 @@ package org.ago.goan.anno.impl.funcAnno;
 import org.ago.goan.anno.Context;
 import org.ago.goan.anno.impl.DetectResult;
 import org.ago.goan.anno.impl.Variable;
-
+import  org.ago.goan.anno.Template;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,11 +76,6 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     @Override
     public String generate(Context ctx, DetectResult result) {
 
-        if (result.result.getClass().equals(goFunc.class)) {
-            goFunc func = (goFunc) result.result;
-            return template.generate(ctx, func, result.linePrefix);
-        }
-
-        return "";
+        return template.generate(ctx, result);
     }
 }

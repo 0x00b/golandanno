@@ -1,6 +1,7 @@
 package org.ago.goan.anno.impl.varAnno;
 
 import org.ago.goan.anno.Context;
+import org.ago.goan.anno.Template;
 import org.ago.goan.anno.impl.DetectResult;
 import org.ago.goan.anno.impl.GoType;
 
@@ -11,6 +12,12 @@ public class varAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
 
     public static Pattern varRegexPattern = Pattern.compile("^\\s*(?:var)?\\s*((?:\\w+|(?:\\,\\s?)*)+)\\s*(\\w*|(?:\\{\\})*)\\s*");
 
+    Template template;
+
+    public varAnnotatorImpl() {
+        super();
+        template = new VarTemplate();
+    }
 
     @Override
     public DetectResult detect(Context ctx) {
@@ -39,13 +46,7 @@ public class varAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
 
     @Override
     public String generate(Context ctx, DetectResult result) {
+        return template.generate(ctx,result);
 
-        if (result.result.getClass().equals(GoType.class)) {
-            GoType type = (GoType) result.result;
-
-            return String.format(result.linePrefix + "//%s TODO", type.getName());
-        }
-
-        return "";
     }
 }

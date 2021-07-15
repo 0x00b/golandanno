@@ -3,7 +3,7 @@ package org.ago.goan.action;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import org.ago.goan.anno.impl.funcAnno.Template;
+import org.ago.goan.anno.impl.funcAnno.TemplateImpl;
 import org.ago.goan.anno.impl.packageAnno.PackageTemplate;
 import org.ago.goan.anno.impl.typeAnno.TypeTemplate;
 import org.ago.goan.anno.impl.varAnno.VarTemplate;
@@ -21,7 +21,7 @@ public class GoAnSettingAction extends AnAction {
             public String loadFuncTemplate() {
                 String data = PropertiesComponent.getInstance().getValue(Constant.FUNC_TEMPLATE_KEY);
                 if (StringUtils.isBlank(data)) {
-                    data = Template.DefaultFuncTemplate;
+                    data = TemplateImpl.DefaultFuncTemplate;
                 }
 
                 return data;
