@@ -27,10 +27,22 @@
                 text="GoAn" description="Auto generate comments for golang function,variable,struct">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
         </action>
-        <action id="org.ago.goan.action.GoAnSettingAction" class="org.ago.goan.action.GoAnSettingAction"
-                text="GoAn Setting">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
-        </action>
+
+
+<!--        <action id="org.ago.goan.action.GoAnFuncAnAction" class="org.ago.goan.action.GoAnFuncAnAction"-->
+<!--                text="GoAn" description="Auto generate comments for golang function,variable,struct">-->
+<!--            <add-to-group group-id="GenerateGroup" anchor="last"/>-->
+<!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt meta SLASH"/>-->
+<!--        </action>-->
+<!--        <action id="org.ago.goan.action.GoAnFuncKeyMap4Windows" class="org.ago.goan.action.GoAnFuncAnAction"-->
+<!--                text="GoAn" description="Auto generate comments for golang function,variable,struct">-->
+<!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt shift SLASH"/>-->
+<!--        </action>-->
+
+<!--        <action id="org.ago.goan.action.GoAnSettingAction" class="org.ago.goan.action.GoAnSettingAction"-->
+<!--                text="GoAn Setting">-->
+<!--            <add-to-group group-id="ToolsMenu" anchor="last"/>-->
+<!--        </action>-->
 <!--         <action id="Go.BuilderGenerator" class="com.cn.oddcn.GoBuilderGeneratorAction"-->
 <!--                text="Generate Go Builder Pattern Code"-->
 <!--                description="Generate Builder pattern code for Go">-->
