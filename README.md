@@ -20,11 +20,14 @@
 
 ![](https://raw.githubusercontent.com/0x00b/golandanno/main/src/main/resources/intro.gif)
 
+使用godoc查看注释效果如下：
+
 ```shell
 godoc -http=localhost:6060
 ```
+![](https://raw.githubusercontent.com/0x00b/golandanno/main/src/main/resources/img_1.png)
 
-![](https://raw.githubusercontent.com/0x00b/golandanno/main/src/main/resources/img.png)
+![](https://raw.githubusercontent.com/0x00b/golandanno/main/src/main/resources/godoc.gif)
 
 
 <!-- Plugin description end -->
