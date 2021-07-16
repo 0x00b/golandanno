@@ -5,7 +5,7 @@
 <br/>
 
 ## <t1>How to use</t1>
-+ 1.control + commond + /  (for windows: control + alt + /)  
++ **1.control + commond + /  (for windows: control + alt + /)**
 + 2.Right click -> Generate -> GoAn
 + 3.Edit comment template
   
@@ -18,8 +18,13 @@
 
 [点击查看使用介绍](https://github.com/0x00b/golandanno/blob/main/README.md)
 
+![](https://raw.githubusercontent.com/0x00b/golandanno/main/src/main/resources/intro.gif)
 
-![](https://github.com/0x00b/golandanno/tree/main/src/main/resources/intro.gif)
+```shell
+godoc -http=localhost:6060
+```
+
+![](https://raw.githubusercontent.com/0x00b/golandanno/main/src/main/resources/img.png)
 
 
 <!-- Plugin description end -->
