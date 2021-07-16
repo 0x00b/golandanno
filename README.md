@@ -5,7 +5,7 @@
 <br/>
 
 ## <t1>How to use</t1>
-+ **1.control + commond + /  (for windows: control + alt + /)**
++ **1.control + command + /  (for windows: control + alt + /)**
 + 2.Right click -> Generate -> GoAn
 + 3.Edit comment template
   
