@@ -162,10 +162,13 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
         } else {
             String[] ps = returnParam.split("\n");
             if (ps.length > 0) {
+                // xxx
                 matcher = Pattern.compile("^\\s*(\\**\\[*\\w*\\]*\\**\\w*\\.*\\w*(?:\\{\\})*)\\s*\\{?\\s*").matcher(ps[0]);
                 if (matcher.find()) {
                     func.addReturns(Variable.ParseString(matcher.group(1)));
                 }
+
+                //TODO 返回值 func (
             }
         }
 
