@@ -108,6 +108,8 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
                 if (-1 == paramEnd) {
                     return null;
                 }
+                //TODO deal func returns
+
                 String funcParam = code.substring(start, paramEnd + 1);
 
                 Variable v = Variable.ParseString(funcParam);
