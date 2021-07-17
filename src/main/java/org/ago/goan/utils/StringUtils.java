@@ -22,7 +22,7 @@ public class StringUtils {
         return true;
     }
 
-    public static boolean matchReg(String str, String reg) {
+    public static boolean matchRegex(String str, String reg) {
         return Pattern.compile(reg).matcher(str).find();
     }
 
@@ -42,9 +42,9 @@ public class StringUtils {
 
         // 找 /**/
         int aEnd = down.indexOf("*/");
-        if (aEnd != -1 && matchReg(lines[ctx.document.getLineNumber(start + aEnd)], ".*\\*/\\s*$")) {
+        if (aEnd != -1 && matchRegex(lines[ctx.document.getLineNumber(start + aEnd)], ".*\\*/\\s*$")) {
             int tStart = down.indexOf("/*");
-            if (tStart != -1 && tStart < aEnd && matchReg(down, "^\\s*/\\*.*")) {
+            if (tStart != -1 && tStart < aEnd && matchRegex(down, "^\\s*/\\*.*")) {
                 aEnd += start;
                 tStart += start;
                 res.find = true;
@@ -66,7 +66,7 @@ public class StringUtils {
         }
 
         //找 //
-        if (matchReg(down, "^\\s*//.*")) {
+        if (matchRegex(down, "^\\s*//.*")) {
             int anStart = lineNumber;
             aEnd = lineNumber;
             //往下找到结束的行
@@ -149,9 +149,9 @@ public class StringUtils {
     public static FindCodeResult findCode(FindCodeResult res) {
         //处理完了还是注释那就先不管了
         if (StringUtils.isBlank(res.code) ||
-                StringUtils.matchReg(res.code, "^\\s*//.*") ||
-                matchReg(res.code, "^\\s*/\\*.*")||
-                matchReg(res.code, "^\\s*\\*/.*")) {
+                StringUtils.matchRegex(res.code, "^\\s*//.*") ||
+                matchRegex(res.code, "^\\s*/\\*.*")||
+                matchRegex(res.code, "^\\s*\\*/.*")) {
             res.find = false;
             return res;
         }

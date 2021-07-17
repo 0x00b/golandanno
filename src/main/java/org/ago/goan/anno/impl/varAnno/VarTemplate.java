@@ -5,7 +5,6 @@ import org.ago.goan.anno.Context;
 import org.ago.goan.anno.Template;
 import org.ago.goan.anno.impl.DetectResult;
 import org.ago.goan.anno.impl.GoType;
-import org.ago.goan.anno.impl.funcAnno.goFunc;
 import org.ago.goan.cust.Constant;
 import org.ago.goan.utils.StringUtils;
 
@@ -126,9 +125,9 @@ public class VarTemplate extends Template {
 
         String content = "";
         if (firstLine && originAnnotation != null && originAnnotation.size() == 1 &&
-                StringUtils.matchReg(lineTemplate.lineTemplate, "^\\s*(?://|/\\*)\\s*\\$\\{var_name\\}")) {
+                StringUtils.matchRegex(lineTemplate.lineTemplate, "^\\s*(?://|/\\*)\\s*\\$\\{var_name\\}")) {
             String origin = originAnnotation.get(0);
-            if (StringUtils.matchReg(origin, "^\\s*(?://|/\\*)\\s*" + type.getName())) {
+            if (StringUtils.matchRegex(origin, "^\\s*(?://|/\\*)\\s*" + type.getName())) {
                 Matcher m = Pattern.compile("^\\s*(?://|/\\*)\\s*" + type.getName() + "\\s*(.*)").matcher(origin);
                 if (m.find() && !StringUtils.isBlank(m.group(1))) {
                     content = origin.substring(origin.indexOf(m.group(1)));

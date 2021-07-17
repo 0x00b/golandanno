@@ -101,9 +101,9 @@ public class TypeTemplate extends Template {
 
         String content = "";
         if (firstLine && originAnnotation != null && originAnnotation.size() == 1 &&
-                StringUtils.matchReg(lineTemplate.lineTemplate, "^\\s*(?://|/\\*)\\s*\\$\\{type_name\\}")) {
+                StringUtils.matchRegex(lineTemplate.lineTemplate, "^\\s*(?://|/\\*)\\s*\\$\\{type_name\\}")) {
             String origin = originAnnotation.get(0);
-            if (StringUtils.matchReg(origin, "^\\s*(?://|/\\*)\\s*" + type.getName())) {
+            if (StringUtils.matchRegex(origin, "^\\s*(?://|/\\*)\\s*" + type.getName())) {
                 Matcher m = Pattern.compile("^\\s*(?://|/\\*)\\s*" + type.getName() + "\\s*(.*)").matcher(origin);
                 if (m.find() && !StringUtils.isBlank(m.group(1))) {
                     content = origin.substring(origin.indexOf(m.group(1)));

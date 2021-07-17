@@ -4,6 +4,7 @@ package org.ago.goan.anno.impl.funcAnno;
 import org.ago.goan.anno.impl.Variable;
 import org.ago.goan.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class goFunc {
@@ -62,12 +63,39 @@ public class goFunc {
         return Returns;
     }
 
-    public void setReturns(List<Variable> returns) {
-        Returns = returns;
+    public void addReturns(Variable ret) {
+        if (ret == null) {
+            return;
+        }
+        if (null == Returns) {
+            Returns = new ArrayList<>();
+        }
+        Returns.add(ret);
+    }
+
+    public void setReturns(List<Variable> rets) {
+        Returns = rets;
     }
 
     public List<Variable> getParameters() {
         return Parameters;
+    }
+
+    public void addParameters(Variable variable) {
+        if (Parameters == null) {
+            Parameters = new ArrayList<>();
+        }
+        Parameters.add(variable);
+    }
+
+    public void addParameters(String code) {
+        Variable v = Variable.ParseString(code);
+        if (v != null) {
+            if (Parameters == null) {
+                Parameters = new ArrayList<>();
+            }
+            Parameters.add(v);
+        }
     }
 
     public void setParameters(List<Variable> parameters) {

@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.ago.goan.anno.impl.Variable;
 import org.ago.goan.anno.impl.funcAnno.TemplateImpl;
 import org.ago.goan.anno.impl.funcAnno.funcAnnotatorImpl;
 import org.ago.goan.anno.impl.typeAnno.typeAnnotatorImpl;
 import org.ago.goan.anno.impl.varAnno.varAnnotatorImpl;
+import org.apache.commons.lang.StringUtils;
 
 public class main {
 
@@ -48,12 +51,40 @@ public class main {
 
     }
 
-    public static void main2(String[] args) {
+
+    public static void main(String[] args) {
+
+        String[] code = new String[]{
+                "context.Context \n",
+                "next func(c context.Context,f func(), i interface{})",
+                " c context.Context \n",
+        };
+
+        for (int i = 0; i < code.length; i++) {
+            System.out.println("==============================================");
+
+//            System.out.println(code[i]);
+
+            Variable variable = new Variable();
+
+            Matcher matcher = Pattern.compile("^(?:\\s*(\\w*)\\s+)?(.*)\\s*").matcher(code[i]);
+            if (matcher.find()) {
+                variable.setName(matcher.group(1));
+                variable.setType(matcher.group(2));
+            }
+
+            System.out.println(variable.getName());
+            System.out.println(variable.getType());
+
+        }
+    }
+
+    public static void main4(String[] args) {
 //        Matcher funcRegexMatcher = funcAnnotatorImpl.funcRegexPattern.matcher();
 
 
         String[] code = new String[]{
-                "SomeFunc()",
+                "Some_Func()",
                 "SomeFunc(t1 Type)",
                 "SomeFunc() error",
                 "SomeFunc(t1 Type) error",
@@ -78,21 +109,7 @@ public class main {
                 "Some=Func(sfadfa){",
                 "func Some=Func(sfadfa){",
                 "func SomeFunc(t1 interface{xxx}) (i interface{xxx}) {",
-        };
 
-        for (int i = 0; i < code.length; i++) {
-            System.out.println("==============================================");
-            Matcher funcRegexMatcher = funcAnnotatorImpl.funcRegexPattern.matcher(code[i]);
-
-            System.out.println(code[i]);
-            if (funcRegexMatcher.find()) {
-                for (int j = 0; j <= funcRegexMatcher.groupCount(); j++) {
-                    System.out.println(funcRegexMatcher.group(j));
-                }
-                System.out.println("==============================================");
-            }
-        }
-        code = new String[]{
                 "type XXX struct()",
                 "type  XXX  struct",
                 "type  XXX  struct {",
@@ -114,12 +131,23 @@ public class main {
 
         for (int i = 0; i < code.length; i++) {
             System.out.println("==============================================");
-            Matcher regexMatcher = funcAnnotatorImpl.typeFuncRegexPattern.matcher(code[i]);
 
             System.out.println(code[i]);
-            if (regexMatcher.find()) {
-                for (int j = 0; j <= regexMatcher.groupCount(); j++) {
-                    System.out.println(regexMatcher.group(j));
+
+            //func (r receiver) Foo (
+            Matcher matcher = Pattern.compile("^\\s*(?:func(?:\\s+|\\s+\\(([\\w\\s\\*]+)\\)\\s+))?(\\w+)\\s*\\(").matcher(code[i]);
+            if (matcher.find()) {
+                for (int j = 0; j <= matcher.groupCount(); j++) {
+                    System.out.println(matcher.group(j));
+                }
+                System.out.println("==============================================");
+            }
+
+            //type Foo func(
+            matcher = Pattern.compile("^\\s*type\\s*(\\w+)\\s*func\\s*\\(").matcher(code[i]);
+            if (matcher.find()) {
+                for (int j = 0; j <= matcher.groupCount(); j++) {
+                    System.out.println(matcher.group(j));
                 }
                 System.out.println("==============================================");
             }
@@ -149,7 +177,7 @@ public class main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
 
         try {
             Process p = Runtime.getRuntime().exec("git config user.name");

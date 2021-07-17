@@ -1,6 +1,5 @@
 package org.ago.goan.anno.impl.funcAnno;
 
-import com.google.errorprone.annotations.Var;
 import com.intellij.ide.util.PropertiesComponent;
 import org.ago.goan.anno.Template;
 import org.ago.goan.anno.Context;
@@ -181,9 +180,9 @@ public class TemplateImpl extends Template {
 
         String content = "";
         if (firstLine && originAnnotation != null && originAnnotation.size() == 1 &&
-                StringUtils.matchReg(lineTemplate.lineTemplate, "^\\s*(?://|/\\*)\\s*\\$\\{func_name\\}")) {
+                StringUtils.matchRegex(lineTemplate.lineTemplate, "^\\s*(?://|/\\*)\\s*\\$\\{func_name\\}")) {
             String origin = originAnnotation.get(0);
-            if (StringUtils.matchReg(origin, "^\\s*(?://|/\\*)\\s*" + func.Name)) {
+            if (StringUtils.matchRegex(origin, "^\\s*(?://|/\\*)\\s*" + func.Name)) {
                 Matcher m = Pattern.compile("^\\s*(?://|/\\*)\\s*" + func.Name + "\\s*(.*)").matcher(origin);
                 if (m.find() && !StringUtils.isBlank(m.group(1))) {
                     content = origin.substring(origin.indexOf(m.group(1)));

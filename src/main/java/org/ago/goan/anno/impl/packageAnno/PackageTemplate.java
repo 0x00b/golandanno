@@ -4,8 +4,6 @@ import com.intellij.ide.util.PropertiesComponent;
 import org.ago.goan.anno.Context;
 import org.ago.goan.anno.Template;
 import org.ago.goan.anno.impl.DetectResult;
-import org.ago.goan.anno.impl.GoType;
-import org.ago.goan.anno.impl.funcAnno.goFunc;
 import org.ago.goan.cust.Constant;
 import org.ago.goan.utils.StringUtils;
 
@@ -97,9 +95,9 @@ public class PackageTemplate extends Template {
 
         String content = "";
         if (firstLine && originAnnotation != null && originAnnotation.size() == 1 &&
-                StringUtils.matchReg(lineTemplate.lineTemplate, "^\\s*(?://|/\\*)\\s*Package\\s*\\$\\{package_name\\}")) {
+                StringUtils.matchRegex(lineTemplate.lineTemplate, "^\\s*(?://|/\\*)\\s*Package\\s*\\$\\{package_name\\}")) {
             String origin = originAnnotation.get(0);
-            if (StringUtils.matchReg(origin, "^\\s*(?://|/\\*)\\s*Package\\s*" + packageName)) {
+            if (StringUtils.matchRegex(origin, "^\\s*(?://|/\\*)\\s*Package\\s*" + packageName)) {
                 Matcher m = Pattern.compile("^\\s*(?://|/\\*)\\s*Package\\s*" + packageName + "\\s*(.*)").matcher(origin);
                 if (m.find() && !StringUtils.isBlank(m.group(1))) {
                     content = origin.substring(origin.indexOf(m.group(1)));
