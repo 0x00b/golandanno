@@ -3,19 +3,24 @@ package org.ago.goan.anno.impl.funcAnno;
 import org.ago.goan.anno.Context;
 import org.ago.goan.anno.impl.DetectResult;
 import org.ago.goan.anno.impl.Variable;
-import  org.ago.goan.anno.Template;
+import org.ago.goan.anno.Template;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
 
+
+    public static String paramRegex = "\\(((?:\\w*\\s*\\.*\\*?\\w*(?:\\{\\})*\\[*\\]*\\,*)*)\\)";
+    public static String returnRegex = "(\\w+|(?:\\((?:\\w*\\s*\\.*\\*?\\w*(?:\\{\\})*\\[*\\]*\\,*)\\)))";
+
     // match "func ... SomeFunc(t1 Type, t2 Type) ... {"
     public static Pattern funcRegexPattern = Pattern.compile("^\\s*(?:func(?:\\s+|\\s+\\(([\\w|\\s|\\*]+)\\)\\s+))?(\\w+)" +
-            "\\(((?:\\w*\\s*\\.*\\*?\\w*(?:\\{\\})*\\[*\\]*\\,*)*)\\)\\s*\\(?((?:\\w*\\s*\\.*\\*?\\w*(?:\\{\\})*\\[*\\]*\\,*)*)\\)?\\s*\\{?\\s*");
+            paramRegex + "\\s*" + returnRegex + "\\s*\\{?\\s*");
 
     // match "type Foo func(...) ...",
-    public static Pattern typeFuncRegexPattern = Pattern.compile("^\\s*type\\s*(\\w+)\\s*func\\s*\\(((?:\\w*\\s*\\.*\\*?\\w*(?:\\{\\})*\\[*\\]*\\,*)*)\\)\\s*" +
-            "\\(?((?:\\w*\\s*\\.*\\*?\\w*(?:\\{\\})*\\[*\\]*\\,*)*)\\)?\\s*");
+    public static Pattern typeFuncRegexPattern = Pattern.compile("^\\s*type\\s*(\\w+)\\s*func\\s*" +
+            paramRegex + "\\s*" + returnRegex + "\\s*");
 
     Template template;
 
