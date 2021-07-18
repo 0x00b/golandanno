@@ -85,8 +85,19 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
     }
 
     public static class ParseParamsResult {
+        ParseParamsResult() {
+            list = new ArrayList<>();
+        }
+
         List<Variable> list;
         int start;
+
+        public void addVariable(Variable v){
+            if (v == null){
+                return;
+            }
+            list.add(v);
+        }
     }
 
     public ParseParamsResult parseParams(List<Variable> list, String code, int start) {
@@ -108,10 +119,18 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
                 if (-1 == paramEnd) {
                     return null;
                 }
-                //TODO deal func returns
 
-                String funcParam = code.substring(start, paramEnd + 1);
+                paramEnd += 1;
 
+                //如果有返回值，找到结束位置
+                if (!StringUtils.matchRegex(code.substring(paramEnd), "^\\s*\\,")) {
+                    ParseParamsResult returnResult = parseReturns(code, paramEnd);
+                    if (returnResult != null) {
+                        paramEnd = returnResult.start;
+                    }
+                }
+
+                String funcParam = code.substring(start, paramEnd);
                 Variable v = Variable.ParseString(funcParam);
                 if (v != null) {
                     list.add(v);
@@ -146,10 +165,13 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
         }
         func.setParameters(result.list);
 
-        return parseReturns(func, code, result.start);
+        ParseParamsResult returns = parseReturns(code, result.start);
+        func.setReturns(returns.list);
+
+        return func;
     }
 
-    public goFunc parseReturns(goFunc func, String code, int start) {
+    public ParseParamsResult parseReturns(String code, int start) {
 
         String returnParam = code.substring(start);
 
@@ -160,21 +182,37 @@ public class funcAnnotatorImpl implements org.ago.goan.anno.impl.GoAnnotator {
             if (result == null) {
                 return null;
             }
-            func.setReturns(result.list);
+            return result;
         } else {
             String[] ps = returnParam.split("\n");
             if (ps.length > 0) {
-                // xxx
-                matcher = Pattern.compile("^\\s*(\\**\\[*\\w*\\]*\\**\\w*\\.*\\w*(?:\\{\\})*)\\s*\\{?\\s*").matcher(ps[0]);
-                if (matcher.find()) {
-                    func.addReturns(Variable.ParseString(matcher.group(1)));
+                Matcher matcher1 = Pattern.compile("^\\s*func\\s*\\(").matcher(ps[0]);
+                if (matcher1.find()) {
+                    //TODO 返回值 func (
+                    List<Variable> list = new ArrayList<>();
+                    ParseParamsResult result = parseParams(list, code, start + matcher1.group(0).length());
+                    if (result != null) {
+                        ParseParamsResult retResult = parseReturns(code,result.start);
+                        if (retResult!=null){
+                            result.addVariable(Variable.ParseString(code.substring(start, retResult.start)));
+                            return result;
+                        }
+                        result.addVariable(Variable.ParseString(code.substring(start, result.start)));
+                        return result;
+                    }
                 }
 
-                //TODO 返回值 func (
+                ParseParamsResult result = new ParseParamsResult();
+                matcher = Pattern.compile("^\\s*(\\**\\[*\\w*\\]*\\**\\w*\\.*\\w*(?:\\{\\})*)\\s*\\,?\\{?\\s*").matcher(ps[0]);
+                if (matcher.find()) {
+                    result.addVariable(Variable.ParseString(matcher.group(1)));
+                    result.start = start + ps[0].indexOf(matcher.group(1)) + matcher.group(1).length();
+                    return result;
+                }
             }
         }
 
-        return func;
+        return null;
     }
 
 

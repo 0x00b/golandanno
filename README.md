@@ -5,8 +5,7 @@
 <br/>
 
 ## <t1>How to use</t1>
-
-+ ![](https://raw.githubusercontent.com/0x00b/golandanno/main/src/main/resources/img.png)
++ **control + command + / (For windows: control + alt + /)**
 + 2.Right click -> Generate -> GoAn
 + 3.Edit comment template
   
