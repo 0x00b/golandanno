@@ -111,14 +111,20 @@ public abstract class Template {
         return annotations;
     }
 
+
+    Pattern SPECIAL_REGEX_CHARS = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
+
+    String escapeSpecialRegexChars(String str) {
+        return SPECIAL_REGEX_CHARS.matcher(str).replaceAll("\\\\$0");
+    }
+
     public String originContent(Context ctx, List<String> originAnnotation, String line) {
         if (originAnnotation == null) {
             return "";
         }
 
-        line = line.replace("{", "\\{").replace("}", "\\}").replace(".", "\\.").
-                replace("*", "\\*").replace("[", "\\[").replace("]", "\\]").
-                replace("(", "\\(").replace(")", "\\)");
+        line = escapeSpecialRegexChars(line);
+
         String reg = line.replaceAll("\\s+", "\\\\s*") + "\\s+(.+)";
 
         for (String s : originAnnotation) {
