@@ -60,6 +60,11 @@ public abstract class Template {
 
         for (int i = 0; i < lines.length; i++) {
             LineTemplate kt = new LineTemplate();
+
+            if (!StringUtils.matchRegex(lines[i], ".*\\s+$")) {
+                //主动补个空格,真正的注释是空格后的，查找原注释内容按照这个规则
+                lines[i] += " ";
+            }
             kt.lineTemplate = lines[i];
             kt.type = lineType(kt.lineTemplate);
 
@@ -114,7 +119,7 @@ public abstract class Template {
         line = line.replace("{", "\\{").replace("}", "\\}").replace(".", "\\.").
                 replace("*", "\\*").replace("[", "\\[").replace("]", "\\]").
                 replace("(", "\\(").replace(")", "\\)");
-        String reg = line.replaceAll("\\s+", "\\\\s*") + "(.+)";
+        String reg = line.replaceAll("\\s+", "\\\\s*") + "\\s+(.+)";
 
         for (String s : originAnnotation) {
             Matcher matcher = Pattern.compile(reg).matcher(s);
