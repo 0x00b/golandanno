@@ -1,16 +1,16 @@
-# GoAn (Goland Annotation)
+# GoComment (Goland Comment)
 
 <!-- Plugin description -->
-**GoAn** is a plugin for goland, auto generate for golang function, variable, struct comments.
+**GoComment** is a plugin for goland, auto generate for golang function, variable, struct comments.
 <br/>
 
 ## <t1>How to use</t1>
 + **control + command + / (For windows: control + alt + /)**
-+ 2.Right click -> Generate -> GoAn
++ 2.Right click -> Generate -> GoComment
 + 3.Edit comment template
   
 ## config template
-+ 1.Select "Tools - GoAn Setting"
++ 1.Select "Tools - GoComment Setting"
 + 2.Edit template
 
 <br/>
@@ -38,7 +38,7 @@ IntelliJ Platform Plugin Template is a repository that provides a pure boilerpla
 # Getting started
 
 ## How to install
-1.goland plugins marketplace(search GoAn)
+1.goland plugins marketplace(search GoComment)
 
 ### special tag, represent beginning of a special line.
 * @receiver ： golang function receiver

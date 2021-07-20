@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>org.0x00b.plugins.goan</id>
-    <name>GoAn</name>
+    <id>org.0x00b.plugins.gocomment</id>
+    <name>GoComment</name>
     <vendor>0x00b</vendor>
 
     <!-- Product and plugin compatibility requirements -->
@@ -19,28 +19,28 @@
 
     <actions>
         <action id="org.ago.goan.action.GoAnAction" class="org.ago.goan.action.GoAnAction"
-                text="GoAn" description="Auto generate comments for golang function,variable,struct">
+                text="GoComment" description="Auto generate comments for golang function,variable,struct">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta SLASH"/>
         </action>
         <action id="org.ago.goan.action.GoAnKeyMap4Windows" class="org.ago.goan.action.GoAnAction"
-                text="GoAn" description="Auto generate comments for golang function,variable,struct">
+                text="GoComment" description="Auto generate comments for golang function,variable,struct">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
         </action>
 
 
         <!--        <action id="org.ago.goan.action.GoAnFuncAnAction" class="org.ago.goan.action.GoAnFuncAnAction"-->
-        <!--                text="GoAn" description="Auto generate comments for golang function,variable,struct">-->
+        <!--                text="GoComment" description="Auto generate comments for golang function,variable,struct">-->
         <!--            <add-to-group group-id="GenerateGroup" anchor="last"/>-->
         <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt meta SLASH"/>-->
         <!--        </action>-->
         <!--        <action id="org.ago.goan.action.GoAnFuncKeyMap4Windows" class="org.ago.goan.action.GoAnFuncAnAction"-->
-        <!--                text="GoAn" description="Auto generate comments for golang function,variable,struct">-->
+        <!--                text="GoComment" description="Auto generate comments for golang function,variable,struct">-->
         <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt shift SLASH"/>-->
         <!--        </action>-->
 
         <action id="org.ago.goan.action.GoAnSettingAction" class="org.ago.goan.action.GoAnSettingAction"
-                text="GoAn Setting">
+                text="GoComment Setting">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
         <!--         <action id="Go.BuilderGenerator" class="com.cn.oddcn.GoBuilderGeneratorAction"-->

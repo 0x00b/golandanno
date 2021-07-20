@@ -58,7 +58,7 @@ public class SettingComponent extends DialogWrapper {
             }, sc);
         }
 
-        setTitle("Edit GoAn Template");
+        setTitle("Edit GoComment Template");
         init();
     }
 
