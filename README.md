@@ -2,7 +2,7 @@
 
 <!-- Plugin description -->
 **GoComment** is a plugin for goland, auto generate for golang function, variable, struct comments. 
-使用默认模版可以生成满足golint要求的注释。
+使用默认模版可以生成满足golint要求的注释。可在goland扩展插件中搜索 GoComment。 本仓库是goland版本，对应的vscode版本地址 https://github.com/0x00b/vscode-go-comment 。
 <br/>
 
 ## <t1>How to use</t1>
